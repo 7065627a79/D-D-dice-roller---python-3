@@ -1,0 +1,78 @@
+import tkinter
+import random
+
+
+def roll():
+    """ this function takes the number of dice and the value of the dice to return the roll result.
+    This is done iterating over the range of 1 to the value of the dice iterated for the number of dice.
+    The results of each iteration are appended to a list called "total".
+
+    if the dice is value is 100, this needs to roll values in multiples of 10. so the dice value is divided by 10
+    operated upon and then multiplied by 10.
+
+    The total list is then passed the the result string function which returns the string which gets set to roll_var"""
+    user_number_of_dice = int(number_of_dice_spinbox.get())
+    user_value_of_dice = int(dice_value_spinbox.get())
+    total = []
+    if user_value_of_dice == 100:
+        user_value_of_dice = user_value_of_dice / 10
+        for i in range(0, user_number_of_dice):
+            result = random.randint(1, int(user_value_of_dice))
+            result *= 10
+            total.append(result)
+    else:
+        for i in range(0, user_number_of_dice):
+            result = random.randint(1, user_value_of_dice)
+            total.append(result)
+
+    roll_var.set(result_string(total))
+
+
+def result_string(total):
+    results_label_string = "You rolled: \n{}\nTotal of dice rolled: \n{}".format(total, sum(total))
+    return results_label_string
+
+
+# Sets up the set values of dice and amount of dice
+accepted_dice_values = [4, 6, 8, 10, 12, 20, 100]
+accepted_number_of_dice = list(range(1, 101))
+
+# Draws Main Window
+mwindow = tkinter.Tk()
+mwindow.title("D&D Dice Roller")
+mwindow.geometry("195x160")
+
+# Sets up the left hand frame for the inputs
+input_frame = tkinter.Frame(mwindow)
+input_frame.grid(row=0, column=0)
+
+# Sets up the right hand frame for the outputs
+output_frame = tkinter.Frame(mwindow)
+output_frame.grid(row=0, column=1)
+
+# Sets up the 2nd row with the label and spinbox for number of dice.
+# Values for spinbox is 1 to 100
+enter_number_dice_label = tkinter.Label(input_frame, text="Enter Number of Dice:  ", pady=4).grid(row=1, column=0, sticky="w")
+
+number_of_dice_spinbox = tkinter.Spinbox(input_frame, width=3, values=accepted_number_of_dice)
+number_of_dice_spinbox.grid(row=1, column=1)
+
+# Sets up the 3rd row with the label and spinbox for the value of dice.
+# Values for spinbox is a list of 2, 4, 6, 8, 10, 12, 20
+enter_value_dice_label = tkinter.Label(input_frame, text="Chose the Value of the Dice:  ", pady=4).grid(row=2, column=0, sticky="w")
+dice_value_spinbox = tkinter.Spinbox(input_frame, width=3, values=accepted_dice_values)
+dice_value_spinbox.grid(row=2, column=1)
+
+# Sets up the roll button
+roll_button = tkinter.Button(input_frame, text="Roll!", command=roll)
+roll_button.grid(row=3, column=0, columnspan=2, pady=4)
+
+# defines roll_var and sets it to 0
+roll_var = tkinter.StringVar()
+test = [0, 0]
+
+# result label set up
+roll_var.set(result_string(test))
+results_label = tkinter.Label(input_frame, textvariable=roll_var, bg="white", pady=4, padx=42, relief="sunken", borderwidth=1).grid(row=4, column=0, columnspan=2, sticky="n")
+
+mwindow.mainloop()
